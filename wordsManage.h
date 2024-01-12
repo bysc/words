@@ -41,6 +41,9 @@ void words_Add(WORDS *words,char *spell,unsigned char part, char *meaning);
 /*删除数据，仅把part置0*/
 void words_Delete(WORDS *words,int location);
 void words_Show(WORDS *words);
+void words_Swap(struct word *pa,struct word *pb);
+/*按时间顺序排序*/
+void words_QuickSortByTime(WORDS *words,int begin,int end);
 //数据结构销毁
 void words_Destroy(WORDS *words);
 /*文件保存*/

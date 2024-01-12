@@ -85,6 +85,37 @@ void words_Show(WORDS *words)
         printf("%s\n",words->arr[i].meaning);
     }
 }
+void words_Swap(struct word *pa,struct word *pb)
+{
+    struct word tmp=(*pa);
+    (*pa)=(*pb);
+    (*pb)=tmp;
+}
+void words_QuickSortByTime(WORDS *words,int begin,int end)
+{
+    if(begin>=end) return;//只有一个数不做处理
+    int left=begin;
+    int right=end;
+    int key=begin;//判断标准，key在左边right先移动
+    //目的是为了保证最后是由right走向left，而right移动时left指向的是比key指向值小的
+    while(left<right)//退出循环时right走向left，且left指向比key小
+    {
+        //right移动时left是不大于key的
+        while(strcmp(words->arr[right].spell,words->arr[key].spell)>=0&&left<right)//降序就更改right和key的比较
+        {
+            --right;
+        }
+        while(strcmp(words->arr[left].spell,words->arr[key].spell)<=0&&left<right)
+        {
+            ++left;
+        }
+        words_Swap(&(words->arr[left]),&(words->arr[right]));//大于key和小于key互换
+    }
+    words_Swap(&(words->arr[key]),&(words->arr[right]));//把key放到中间来，把right指向的小于key的放到前面去
+    key=right;//key位置变换到中间
+    words_QuickSortByTime(words,begin,key-1);//左边快速排序
+    words_QuickSortByTime(words,key+1,end);//右边快速排序
+}
 void words_Destroy(WORDS *words)
 {
     free(words->arr);

@@ -1,9 +1,11 @@
 # depslib dependency file v1.0
-1702609269 source:d:\projects\codeblocks\words\gtk_ui.c
+1705072134 source:d:\projects\codeblocks\words\gtk_ui.c
 	"gtk_ui.h"
 
-1702609211 d:\projects\codeblocks\words\gtk_ui.h
+1705070686 d:\projects\codeblocks\words\gtk_ui.h
+	"systemManage.h"
 	<gtk/gtk.h>
+	<glib/gi18n.h>
 
 1700265979 d:\msys2\mingw64\include\gtk-4.0\gtk\gtk.h
 	<gtk/css/gtkcss.h>
@@ -3399,26 +3401,28 @@
 1700265979 d:\msys2\mingw64\include\gtk-4.0\gtk\gtkwindowhandle.h
 	<gtk/gtkwidget.h>
 
-1704982784 source:d:\projects\codeblocks\words\wordsmanage.c
+1705057150 source:d:\projects\codeblocks\words\wordsmanage.c
 	"wordsManage.h"
 
-1704980037 d:\projects\codeblocks\words\wordsmanage.h
+1705057057 d:\projects\codeblocks\words\wordsmanage.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 
-1704983980 source:d:\projects\codeblocks\words\main.c
+1705072531 source:d:\projects\codeblocks\words\main.c
 	<stdio.h>
 	<stdlib.h>
 	"systemManage.h"
+	"gtk_ui.h"
 
-1704982858 d:\projects\codeblocks\words\systemmanage.h
+1705067758 d:\projects\codeblocks\words\systemmanage.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<windows.h>
 	"wordsManage.h"
 	"phrasesManage.h"
+	"index.h"
 
 1701607879 d:\msys2\mingw64\include\windows.h
 	<_mingw.h>
@@ -4268,7 +4272,7 @@
 1701607879 d:\msys2\mingw64\include\imm.h
 	<_mingw_unicode.h>
 
-1704983963 source:d:\projects\codeblocks\words\systemmanage.c
+1705067755 source:d:\projects\codeblocks\words\systemmanage.c
 	"systemManage.h"
 
 1704984594 d:\projects\codeblocks\words\phrasesmanage.h
@@ -4278,4 +4282,31 @@
 
 1704985320 source:d:\projects\codeblocks\words\phrasesmanage.c
 	"phrasesManage.h"
+
+1705058122 d:\projects\codeblocks\words\index.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1705058122 source:d:\projects\codeblocks\words\index.c
+	"index.h"
+
+1698258874 d:\msys2\mingw64\include\glib-2.0\glib\gi18n.h
+	<glib.h>
+	<libintl.h>
+	<string.h>
+
+1700731281 d:\msys2\mingw64\include\libintl.h
+	<locale.h>
+	<xlocale.h>
+	<stdio.h>
+	<stddef.h>
+	<stdarg.h>
+	<varargs.h>
+
+1701607879 d:\msys2\mingw64\include\locale.h
+	<crtdefs.h>
+	<stdio.h>
+
+1701607879 d:\msys2\mingw64\include\varargs.h
 
