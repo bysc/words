@@ -30,32 +30,200 @@ void test_phrases()
     phrases_Destroy(phrases);
 }
 
-void sys_Init(WORDS *words,PHRASES *phrases,treeNode *root)
+void sys_Init(TOPCON *topcon)
 {
-    words=words_Init();
-    phrases=phrases_Init();
-    words_QuickSortByTime(words,0,words->datasize);//字典乱序，防止索引树退化
-    for(int i=0;i<=words->datasize;i++)
+    TOPCON *tc=topcon;
+    tc->words=words_Init();
+    tc->phrases=phrases_Init();
+    tc->root=NULL;
+    if(tc->words->datasize<0) return;
+    words_QuickSortByTime(tc->words,0,tc->words->datasize);//字典乱序，防止索引树退化
+    for(int i=0; i<=tc->words->datasize; i++)
     {
-        root=BSI_Insert(root,words->arr[i].spell,i,NULL);
+        tc->root=BSI_Insert(tc->root,tc->words->arr[i].spell,i,NULL);
     }
-    //更新链表索引
-    struct phrase *left=phrases->head,*right=phrases->head->next;
+//  更新链表索引
+    struct phrase *left=(tc->phrases)->head,*right=(tc->phrases)->head->next;
     while(right!=NULL)
     {
         if(strcmp(left->spell,right->spell)!=0)//right入索引
         {
-            treeNode *location=BSI_Search(root,right->spell);
+            treeNode *location=BSI_Search(tc->root,right->spell);
             if(location!=NULL) location->listloc=(void*)right;
         }
-        else //相同往后走
-        {
-            left=right;
-            right=right->next;
-        }
+//相同往后走，不同也往后走
+        left=right;
+        right=right->next;
     }
 }
-void sys_AddWord(WORDS *words,treeNode *root)
+void sys_AddWord(TOPCON *topcon)
 {
+    TOPCON *tc=(TOPCON*)topcon;
+    words_Add(tc->words,tc->spell,tc->part,tc->meaning);
+    tc->root=BSI_Insert(tc->root,tc->spell,tc->words->datasize,NULL);
     return;
+}
+void sys_DelWord(TOPCON *topcon)
+{
+    treeNode *temp=BSI_Search(topcon->root,topcon->spell);
+    //delete the word by index
+    words_Delete(topcon->words,temp->arrloc);
+    //delete the phrases
+    //理论索引更快，定位到第一个节点，但不知道上一个节点地址，不更新算法的话不能用
+    phrases_Delete(topcon->phrases,topcon->spell);
+    //delete the index
+    topcon->root=BSI_Delete(topcon->root,topcon->spell);
+}
+void sys_AddPhrase(TOPCON *topcon)
+{
+    //待更新内容
+    treeNode *location=BSI_Search(topcon->root,topcon->spell);
+
+    void *ret=phrases_Add(topcon->phrases,topcon->spell,topcon->item,topcon->meaning);
+    location->listloc=ret;
+}
+void sys_DelPhrase(TOPCON *topcon)
+{
+    //待更新内容
+    treeNode *location=BSI_Search(topcon->root,topcon->spell);
+    phrases_Delete(topcon->phrases,topcon->spell);
+    location->listloc=NULL;
+}
+
+
+//==================================================
+char *sys_ShowWords(TOPCON *topcon)
+{
+    int count=topcon->words->exactsize;
+    char *ret=(char*)malloc(count*50+100);
+    strcpy(ret,"\tWORDS ARE AS FOLLOWS:\t\nspell\tpart.\tmeaning\n");
+    if(count<0) return ret;
+    for(int i=0; i<=count; i++)
+    {
+        if(topcon->words->arr[i].part==0) continue;
+        strcat(ret,topcon->words->arr[i].spell);
+        switch(topcon->words->arr[i].part)
+        {
+        case 1:
+            strcat(ret,"\tnoun.\t");
+            break;
+        case 2:
+            strcat(ret,"\tpron.\t");
+            break;
+        case 3:
+            strcat(ret,"\tadj.\t");
+            break;
+        case 4:
+            strcat(ret,"\tadv.\t");
+            break;
+        case 5:
+            strcat(ret,"\tverb.\t");
+            break;
+        case 6:
+            strcat(ret,"\tnum.\t");
+            break;
+        case 7:
+            strcat(ret,"\tart.\t");
+            break;
+        case 8:
+            strcat(ret,"\tprep.\t");
+            break;
+        case 9:
+            strcat(ret,"\tconj.\t");
+            break;
+        case 10:
+            strcat(ret,"\tinterj.\t");
+            break;
+        }
+        strcat(ret,topcon->words->arr[i].meaning);
+        strcat(ret,"\n");
+    }
+    return ret;
+}
+char *sys_ShowPhrases(TOPCON *topcon)
+{
+    int count=topcon->phrases->size;
+    char *ret=(char*)malloc(count*60+160);
+    strcpy(ret,"\tPHRASES ARE AS FOLLOWS:\nspell\t\titem\t\tmeaning\n");
+    if(count<0) return ret;
+    for(struct phrase *tmp=topcon->phrases->head->next;tmp!=NULL;tmp=tmp->next)
+    {
+        strcat(ret,tmp->spell);
+        strcat(ret,"\t\t");
+        strcat(ret,tmp->item);
+        strcat(ret,"\t\t");
+        strcat(ret,tmp->meaning);
+        strcat(ret,"\n");
+    }
+    return ret;
+}
+char *sys_SearchWord(TOPCON *topcon)
+{
+    char *ret=(char*)malloc(1000);
+    strcpy(ret,"the first line is word, and the others are phrases\n");
+    treeNode *location=BSI_Search(topcon->root,topcon->spell);
+    int i=location->arrloc;
+    strcat(ret,topcon->words->arr[i].spell);
+    switch(topcon->words->arr[i].part)
+    {
+    case 1:
+        strcat(ret,"\tnoun.\t");
+        break;
+    case 2:
+        strcat(ret,"\tpron.\t");
+        break;
+    case 3:
+        strcat(ret,"\tadj.\t");
+        break;
+    case 4:
+        strcat(ret,"\tadv.\t");
+        break;
+    case 5:
+        strcat(ret,"\tverb.\t");
+        break;
+    case 6:
+        strcat(ret,"\tnum.\t");
+        break;
+    case 7:
+        strcat(ret,"\tart.\t");
+        break;
+    case 8:
+        strcat(ret,"\tprep.\t");
+        break;
+    case 9:
+        strcat(ret,"\tconj.\t");
+        break;
+    case 10:
+        strcat(ret,"\tinterj.\t");
+        break;
+    }
+    strcat(ret,topcon->words->arr[i].meaning);
+    strcat(ret,"\n");
+    struct phrase *tmp=(struct phrase*)(location->listloc);
+    while(tmp!=NULL)
+    {
+        if(strcmp(tmp->spell,topcon->spell)) break;
+        strcat(ret,tmp->spell);
+        strcat(ret,"\t");
+        strcat(ret,tmp->item);
+        strcat(ret,"\t");
+        strcat(ret,tmp->meaning);
+        strcat(ret,"\n");
+        tmp=tmp->next;
+    }
+    return ret;
+}
+
+void sys_SortWord(TOPCON *topcon)
+{
+    words_QuickSortByTime(topcon->words,0,topcon->words->datasize);
+}
+
+void sys_Save(TOPCON *topcon)
+{
+    words_Save(topcon->words);
+    phrases_Save(topcon->phrases);
+    words_Destroy(topcon->words);
+    phrases_Destroy(topcon->phrases);
+    BSI_Destory(topcon->root);
 }

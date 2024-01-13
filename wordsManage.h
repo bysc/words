@@ -43,6 +43,8 @@ void words_Delete(WORDS *words,int location);
 void words_Show(WORDS *words);
 void words_Swap(struct word *pa,struct word *pb);
 /*按时间顺序排序*/
+void words_QuickSortBySpell(WORDS *words,int begin,int end);
+/*按时间排序*/
 void words_QuickSortByTime(WORDS *words,int begin,int end);
 //数据结构销毁
 void words_Destroy(WORDS *words);

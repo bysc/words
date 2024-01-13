@@ -15,6 +15,7 @@ PHRASES* phrases_Init()
     else
     {
         fread(&(phrases->size),sizeof(int),1,fp);
+        if(phrases->size>=0)
         for(int i=0;i<=phrases->size;i++)
         {
             struct phrase *new_item=(struct phrase*)malloc(sizeof(struct phrase));
@@ -85,6 +86,7 @@ void phrases_Save(PHRASES *phrases)
     FILE *fp=fopen("phrases.bin","wb");
     fwrite(&(phrases->size),sizeof(int),1,fp);
     struct phrase *travel=phrases->head->next;
+    if(phrases->size>=0)
     for(int i=0; i<=phrases->size; i++)
     {
         fwrite(travel,sizeof(struct phrase),1,fp);
