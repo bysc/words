@@ -49,7 +49,7 @@ static void update_password_button (GObject *object,
     LOGING *p=(LOGING*)data;
     const char *text = gtk_editable_get_text (GTK_EDITABLE (p->password_entry1));
     const char *text2 = gtk_editable_get_text (GTK_EDITABLE (p->password_entry2));
-    gtk_widget_set_sensitive (p->password_button,g_str_equal (text,"bysc")&&g_str_equal(text2,"20216234"));
+    gtk_widget_set_sensitive (p->password_button,g_str_equal (text,"account")&&g_str_equal(text2,"password"));
 //    gtk_widget_set_sensitive (p->password_button,text[0] != '\0' && g_str_equal (text, text2));
     //不为零且相等时按键可点击
 }
@@ -57,24 +57,28 @@ static void menu_AddWord(GtkWidget *widget,gpointer data)
 {
     TOPCON *topcon=(TOPCON*)data;
     sys_AddWord(topcon);
+    gtk_text_buffer_set_text (menu_show_buffer,"Add successfully!", -1);
     menu_Button_Init_Sensitive();
 }
 static void menu_DelWord(GtkWidget *widget,gpointer data)
 {
     TOPCON *topcon=(TOPCON*)data;
     sys_DelWord(topcon);
+    gtk_text_buffer_set_text (menu_show_buffer,"Delete successfully!", -1);
     menu_Button_Init_Sensitive();
 }
 static void menu_AddPhrase(GtkWidget *widget,gpointer data)
 {
     TOPCON *topcon=(TOPCON*)data;
     sys_AddPhrase(topcon);
+    gtk_text_buffer_set_text (menu_show_buffer,"Add successfully!", -1);
     menu_Button_Init_Sensitive();
 }
 static void menu_DelPhrase(GtkWidget *widget,gpointer data)
 {
     TOPCON *topcon=(TOPCON*)data;
     sys_DelPhrase(topcon);
+    gtk_text_buffer_set_text (menu_show_buffer,"Delete successfully!", -1);
     menu_Button_Init_Sensitive();
 }
 
@@ -107,7 +111,9 @@ static void menu_SearchWord(GtkWidget *widget,gpointer data)
 static void menu_SortWord(GtkWidget *widget,gpointer data)
 {
     TOPCON *topcon=(TOPCON*)data;
-    sys_SortWord(topcon);
+    char *tmp=sys_SortWord(topcon);
+    gtk_text_buffer_set_text (menu_show_buffer, tmp, -1);
+    free(tmp);
     menu_Button_Init_Sensitive();
 }
 

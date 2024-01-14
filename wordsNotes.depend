@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1705159170 source:d:\projects\codeblocks\words\gtk_ui.c
+1705213848 source:d:\projects\codeblocks\words\gtk_ui.c
 	"gtk_ui.h"
 
 1705151377 d:\projects\codeblocks\words\gtk_ui.h
@@ -3401,7 +3401,7 @@
 1700265979 d:\msys2\mingw64\include\gtk-4.0\gtk\gtkwindowhandle.h
 	<gtk/gtkwidget.h>
 
-1705163670 source:d:\projects\codeblocks\words\wordsmanage.c
+1705202722 source:d:\projects\codeblocks\words\wordsmanage.c
 	"wordsManage.h"
 
 1705163647 d:\projects\codeblocks\words\wordsmanage.h
@@ -3415,7 +3415,7 @@
 	"systemManage.h"
 	"gtk_ui.h"
 
-1705159117 d:\projects\codeblocks\words\systemmanage.h
+1705200680 d:\projects\codeblocks\words\systemmanage.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -4272,7 +4272,7 @@
 1701607879 d:\msys2\mingw64\include\imm.h
 	<_mingw_unicode.h>
 
-1705163459 source:d:\projects\codeblocks\words\systemmanage.c
+1705203045 source:d:\projects\codeblocks\words\systemmanage.c
 	"systemManage.h"
 
 1704984594 d:\projects\codeblocks\words\phrasesmanage.h
@@ -4280,7 +4280,7 @@
 	<stdlib.h>
 	<string.h>
 
-1705162633 source:d:\projects\codeblocks\words\phrasesmanage.c
+1705201698 source:d:\projects\codeblocks\words\phrasesmanage.c
 	"phrasesManage.h"
 
 1705058122 d:\projects\codeblocks\words\index.h

@@ -31,6 +31,7 @@ char *sys_ShowWords(TOPCON *topcon);
 char *sys_ShowPhrases(TOPCON *topcon);
 char *sys_SearchWord(TOPCON *topcon);
 //====================================
-void sys_SortWord(TOPCON *topcon);
+/*sort by spell, return a new str*/
+char *sys_SortWord(TOPCON *topcon);
 void sys_Save(TOPCON *topcon);
 #endif // SYSTEMMANAGE_H_INCLUDED

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "systemManage.h"
 #include "gtk_ui.h"
+/*登录初始账户密码为account和password*/
 int main (int argc,char **argv)
 {
     static TOPCON topcon;

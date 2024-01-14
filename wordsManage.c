@@ -47,38 +47,38 @@ void words_Show(WORDS *words)
     for(int i=0; i<=words->datasize; i++)
     {
         if(words->arr[i].part==0) continue;
-        printf("%d\t%s\t",words->arr[i].time,words->arr[i].spell);
+        printf("%d\t\t%s\t\t",words->arr[i].time,words->arr[i].spell);
         switch(words->arr[i].part)
         {
         case 1:
-            printf("noun.\t");
+            printf("noun.\t\t");
             break;
         case 2:
-            printf("pron.\t");
+            printf("pron.\t\t");
             break;
         case 3:
-            printf("adj.\t");
+            printf("adj.\t\t");
             break;
         case 4:
-            printf("adv.\t");
+            printf("adv.\t\t");
             break;
         case 5:
-            printf("verb.\t");
+            printf("verb.\t\t");
             break;
         case 6:
-            printf("num.\t");
+            printf("num.\t\t");
             break;
         case 7:
-            printf("art.\t");
+            printf("art.\t\t");
             break;
         case 8:
-            printf("prep.\t");
+            printf("prep.\t\t");
             break;
         case 9:
-            printf("conj.\t");
+            printf("conj.\t\t");
             break;
         case 10:
-            printf("interj.\t");
+            printf("interj.\t\t");
             break;
         }
         printf("%s\n",words->arr[i].meaning);
@@ -112,8 +112,8 @@ void words_QuickSortBySpell(WORDS *words,int begin,int end)
     }
     words_Swap(&(words->arr[key]),&(words->arr[right]));//把key放到中间来，把right指向的小于key的放到前面去
     key=right;//key位置变换到中间
-    words_QuickSortByTime(words,begin,key-1);//左边快速排序
-    words_QuickSortByTime(words,key+1,end);//右边快速排序
+    words_QuickSortBySpell(words,begin,key-1);//左边快速排序
+    words_QuickSortBySpell(words,key+1,end);//右边快速排序
 }
 void words_QuickSortByTime(WORDS *words,int begin,int end)
 {

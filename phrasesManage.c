@@ -77,7 +77,7 @@ void phrases_Show(PHRASES *phrases)
     struct phrase *travel=phrases->head->next;
     while(travel!=NULL)
     {
-        printf("%s\t%s\t\t%s\n",travel->spell,travel->item,travel->meaning);
+        printf("%s\t\t%s\t\t%s\n",travel->spell,travel->item,travel->meaning);
         travel=travel->next;
     }
 }

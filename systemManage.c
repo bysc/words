@@ -95,44 +95,47 @@ void sys_DelPhrase(TOPCON *topcon)
 char *sys_ShowWords(TOPCON *topcon)
 {
     int count=topcon->words->exactsize;
-    char *ret=(char*)malloc(count*50+100);
-    strcpy(ret,"\tWORDS ARE AS FOLLOWS:\t\nspell\tpart.\tmeaning\n");
+    char *ret=(char*)malloc(count*60+100);
+    strcpy(ret,"WORDS ARE AS FOLLOWS:\nspell\t\tpart.\t\tmeaning\n");
     if(count<0) return ret;
+    char time[10]="";
     for(int i=0; i<=count; i++)
     {
         if(topcon->words->arr[i].part==0) continue;
+        sprintf(time,"%u\t\t",topcon->words->arr[i].time);
+        strcat(ret,time);
         strcat(ret,topcon->words->arr[i].spell);
         switch(topcon->words->arr[i].part)
         {
         case 1:
-            strcat(ret,"\tnoun.\t");
+            strcat(ret,"\t\tnoun.\t\t");
             break;
         case 2:
-            strcat(ret,"\tpron.\t");
+            strcat(ret,"\t\tpron.\t\t");
             break;
         case 3:
-            strcat(ret,"\tadj.\t");
+            strcat(ret,"\t\tadj.\t\t");
             break;
         case 4:
-            strcat(ret,"\tadv.\t");
+            strcat(ret,"\t\tadv.\t\t");
             break;
         case 5:
-            strcat(ret,"\tverb.\t");
+            strcat(ret,"\t\tverb.\t\t");
             break;
         case 6:
-            strcat(ret,"\tnum.\t");
+            strcat(ret,"\t\tnum.\t\t");
             break;
         case 7:
-            strcat(ret,"\tart.\t");
+            strcat(ret,"\t\tart.\t\t");
             break;
         case 8:
-            strcat(ret,"\tprep.\t");
+            strcat(ret,"\t\tprep.\t\t");
             break;
         case 9:
-            strcat(ret,"\tconj.\t");
+            strcat(ret,"\t\tconj.\t\t");
             break;
         case 10:
-            strcat(ret,"\tinterj.\t");
+            strcat(ret,"\t\tinterj.\t\t");
             break;
         }
         strcat(ret,topcon->words->arr[i].meaning);
@@ -144,9 +147,9 @@ char *sys_ShowPhrases(TOPCON *topcon)
 {
     int count=topcon->phrases->size;
     char *ret=(char*)malloc(count*60+160);
-    strcpy(ret,"\tPHRASES ARE AS FOLLOWS:\nspell\t\titem\t\tmeaning\n");
+    strcpy(ret,"PHRASES ARE AS FOLLOWS:\nspell\t\titem\t\tmeaning\n");
     if(count<0) return ret;
-    for(struct phrase *tmp=topcon->phrases->head->next;tmp!=NULL;tmp=tmp->next)
+    for(struct phrase *tmp=topcon->phrases->head->next; tmp!=NULL; tmp=tmp->next)
     {
         strcat(ret,tmp->spell);
         strcat(ret,"\t\t");
@@ -167,34 +170,34 @@ char *sys_SearchWord(TOPCON *topcon)
     switch(topcon->words->arr[i].part)
     {
     case 1:
-        strcat(ret,"\tnoun.\t");
+        strcat(ret,"\t\tnoun.\t\t");
         break;
     case 2:
-        strcat(ret,"\tpron.\t");
+        strcat(ret,"\t\tpron.\t\t");
         break;
     case 3:
-        strcat(ret,"\tadj.\t");
+        strcat(ret,"\t\tadj.\t\t");
         break;
     case 4:
-        strcat(ret,"\tadv.\t");
+        strcat(ret,"\t\tadv.\t\t");
         break;
     case 5:
-        strcat(ret,"\tverb.\t");
+        strcat(ret,"\t\tverb.\t\t");
         break;
     case 6:
-        strcat(ret,"\tnum.\t");
+        strcat(ret,"\t\tnum.\t\t");
         break;
     case 7:
-        strcat(ret,"\tart.\t");
+        strcat(ret,"\t\tart.\t\t");
         break;
     case 8:
-        strcat(ret,"\tprep.\t");
+        strcat(ret,"\t\tprep.\t\t");
         break;
     case 9:
-        strcat(ret,"\tconj.\t");
+        strcat(ret,"\t\tconj.\t\t");
         break;
     case 10:
-        strcat(ret,"\tinterj.\t");
+        strcat(ret,"\t\tinterj.\t\t");
         break;
     }
     strcat(ret,topcon->words->arr[i].meaning);
@@ -204,9 +207,9 @@ char *sys_SearchWord(TOPCON *topcon)
     {
         if(strcmp(tmp->spell,topcon->spell)) break;
         strcat(ret,tmp->spell);
-        strcat(ret,"\t");
+        strcat(ret,"\t\t");
         strcat(ret,tmp->item);
-        strcat(ret,"\t");
+        strcat(ret,"\t\t");
         strcat(ret,tmp->meaning);
         strcat(ret,"\n");
         tmp=tmp->next;
@@ -214,9 +217,65 @@ char *sys_SearchWord(TOPCON *topcon)
     return ret;
 }
 
-void sys_SortWord(TOPCON *topcon)
+char *sys_SortWord(TOPCON *topcon)
 {
-    words_QuickSortByTime(topcon->words,0,topcon->words->datasize);
+    int datasize=topcon->words->datasize;
+    char *ret=(char*)malloc((datasize+2)*60);
+    strcpy(ret,"");
+    if(topcon->words->exactsize<0)
+    {
+        strcpy(ret,"there is nothing in the words");
+        return ret;
+    }
+    WORDS tmp;
+    tmp.arr=(struct word*)malloc(sizeof(struct word)*(datasize+1));
+    tmp.datasize=datasize;
+    tmp.exactsize=topcon->words->exactsize;
+
+    memcpy(tmp.arr,topcon->words->arr,(datasize+1)*sizeof(struct word));
+    words_QuickSortBySpell(&tmp,0,datasize);
+    for(int i=0; i<=datasize; i++)
+    {
+        if(tmp.arr[i].part==0) continue;
+        strcat(ret,tmp.arr[i].spell);
+        switch(tmp.arr[i].part)
+        {
+        case 1:
+            strcat(ret,"\t\tnoun.\t\t");
+            break;
+        case 2:
+            strcat(ret,"\t\tpron.\t\t");
+            break;
+        case 3:
+            strcat(ret,"\t\tadj.\t\t");
+            break;
+        case 4:
+            strcat(ret,"\t\tadv.\t\t");
+            break;
+        case 5:
+            strcat(ret,"\t\tverb.\t\t");
+            break;
+        case 6:
+            strcat(ret,"\t\tnum.\t\t");
+            break;
+        case 7:
+            strcat(ret,"\t\tart.\t\t");
+            break;
+        case 8:
+            strcat(ret,"\t\tprep.\t\t");
+            break;
+        case 9:
+            strcat(ret,"\t\tconj.\t\t");
+            break;
+        case 10:
+            strcat(ret,"\t\tinterj.\t\t");
+            break;
+        }
+        strcat(ret,tmp.arr[i].meaning);
+        strcat(ret,"\n");
+    }
+    free(tmp.arr);
+    return ret;
 }
 
 void sys_Save(TOPCON *topcon)
